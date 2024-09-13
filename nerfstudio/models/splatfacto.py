@@ -509,11 +509,11 @@ class SplatfactoModel(Model):
             raise ValueError(f"Unknown background color {self.config.background_color}")
         return background
 
-    def _apply_bilateral_grid(self, rgb: torch.Tensor, cam_idx: int, H: int, W: int) -> torch.Tensor:
+    def _apply_bilateral_grid(self, rgb: torch.Tensor, cam_idx: int, height: int, width: int) -> torch.Tensor:
         # make xy grid
         grid_y, grid_x = torch.meshgrid(
-            torch.linspace(0, 1.0, H, device=self.device),
-            torch.linspace(0, 1.0, W, device=self.device),
+            (torch.arange(height, device=self.device) + 0.5) / height,
+            (torch.arange(width, device=self.device) + 0.5) / width,
             indexing="ij",
         )
         grid_xy = torch.stack([grid_x, grid_y], dim=-1).unsqueeze(0)
